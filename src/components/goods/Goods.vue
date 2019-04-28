@@ -1,17 +1,17 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li v-for="item in goods" class="menu-item">
+        <li v-for="(item, index) in goods" class="menu-item" @click="selectMenu(index,$event)">
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
           </span>
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li v-for="item in goods" class="food-list">
+        <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title"> {{item.name}}</h1>
           <ul>
             <li v-for="food in item.foods"  class="food-item border-1px">
@@ -49,6 +49,8 @@
 <script>
   import cartcontrol from '@/components/cartcontrol/cartcontrol';
   import shopcart from '@/components/shopcart/shopcart';
+  import BScroll from 'better-scroll';
+
   export default {
     components: {
       cartcontrol,
@@ -65,12 +67,37 @@
         goods: [],
       };
     },
+    methods:{
+      //点击菜单栏对应滚动到菜单list
+      selectMenu(index, event){
+        if (!event._constructed) {
+          return;
+        }
+        let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+        let el = foodList[index];
+        this.foodsScroll.scrollToElement(el, 300);
+      },
+      //初始化滚动试图
+      initScroll(){
+        this.meunScroll = new BScroll(this.$refs.menuWrapper, {
+          click: true
+        });
+        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+          click: true,
+          probeType: 3
+        });
+      }
+    },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
       this.$http.get('/api/goods').then((response) => {
         response = response.body;
         if (response.errno === 0) {
           this.goods = response.data;
+          this.$nextTick(() => {
+            this.initScroll();
+            // this._calculateHeight();
+          });
         }
       });
     },

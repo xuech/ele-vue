@@ -9,6 +9,7 @@ Vue.use(Router)
 export default new Router({
   // 给router的class取别名
   linkActiveClass: 'el-active',
+  mode:'history',
   routes: [
     {
       path: '/goods',
