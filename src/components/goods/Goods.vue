@@ -14,7 +14,7 @@
         <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title"> {{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods"  class="food-item border-1px">
+            <li v-for="food in item.foods"  class="food-item border-1px" @click="detail(food)">
               <div class="icon">
                 <img width="57px" height="57px" :src="food.icon"/>
               </div>
@@ -68,6 +68,9 @@
       };
     },
     methods:{
+      detail(food){
+        this.$router.push({'name':'foodDetail',query:{food:JSON.stringify(food)}})
+      },
       //点击菜单栏对应滚动到菜单list
       selectMenu(index, event){
         if (!event._constructed) {
