@@ -13,7 +13,6 @@
       </div>
     </div>
     <router-view :seller="seller"></router-view>
-    <div class="content">3</div>
   </div>
 </template>
 
