@@ -65,7 +65,7 @@
     .star-item
       width 15px
       height 15px
-      margin-right 22px
+      margin-right 10px
       background-size 15px 15px
       &.on
         bg-image('star36_on')
